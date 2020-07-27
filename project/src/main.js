@@ -24,6 +24,10 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 
+//全局守卫
+// router.beforeEach((to, from, next) => {
+//   next("/login")
+// })
 
 Vue.prototype.$imgPre = "http://localhost:3000"
 /* eslint-disable no-new */

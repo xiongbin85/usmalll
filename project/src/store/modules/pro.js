@@ -1,4 +1,4 @@
-import { requestSizeList, requestSizeCount } from "../../util/request"
+import { requestProList, requestProCount } from "../../util/request"
 const state = {
     list: [],
     size: 2,
@@ -7,9 +7,9 @@ const state = {
 }
 
 const mutations = {
-    changeUserList(state, arr) {
+    changeProList(state, arr) {
         arr.forEach(i => {
-            i.attrs = JSON.parse(i.attrs)
+            i.specsattr = JSON.parse(i.specsattr)
         });
         state.list = arr;
         //console.log(arr);
@@ -23,27 +23,27 @@ const mutations = {
 }
 
 const actions = {
-    requestSizeList(context) {
+    requestProList(context) {
         let params = {
             page: context.state.page,
             size: context.state.size
         }
-        requestSizeList(params).then(res => {
+        requestProList(params).then(res => {
             if (res.data.list.length == 0 && context.state.page > 1) {
                 context.commit("changePage", context.state.page - 1);
                 context.dispatch("requestList")
                 return;
             }
-            context.commit("changeUserList", res.data.list)
+            context.commit("changeProList", res.data.list)
         })
     },
-    requestAllList(context) {
-        requestSizeList().then(res => {
-            context.commit("changeUserList", res.data.list)
+    requestAllPro(context) {
+        requestProList().then(res => {
+            context.commit("changeProList", res.data.list)
         })
     },
-    requestSizeCount(context) {
-        requestSizeCount().then(res => {
+    requestProCount(context) {
+        requestProCount().then(res => {
             context.commit("changeTotal", res.data.list[0].total)
         })
     },

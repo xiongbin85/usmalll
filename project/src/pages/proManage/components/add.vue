@@ -51,9 +51,9 @@
           </el-select>
         </el-form-item>
         <el-form-item label="商品属性" label-width="80px">
-          <el-select v-model="form.specsattr" placeholder="请选择"  multiple>
+          <el-select v-model="form.specsattr" multiple placeholder="请选择">
             <el-option label="---请选择---" disabled value></el-option>
-            <el-option v-for="item in sizeChildren" :key="item.id" :label="item" :value="item.id"></el-option>
+            <el-option v-for="item in sizeChildren" :key="item" :label="item" :value="item"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="是否新品" label-width="80px">
@@ -121,6 +121,8 @@ export default {
     ...mapActions({
       requestClassify: "classify/requestClassifyList",
       requestSize: "size/requestAllList",
+      requestList: "pro/requestProList",
+      requestTotal: "pro/requestProCount",
     }),
     empty() {
       this.form = {
@@ -171,12 +173,39 @@ export default {
       //console.log(this.form);
     },
     add() {
+      this.form.specsattr = JSON.stringify(this.form.specsattr);
+      //console.log(this.form.specsattr);
       requestProAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
           this.cancel();
           this.empty();
           this.requestList();
+          this.requestTotal();
+        } else {
+          warningAlert(res.data.msg);
+        }
+      });
+    },
+    getDetail(id) {
+      requestProDetail({ id: id }).then((res) => {
+        this.form = res.data.list;
+        this.form.id = id;
+        this.imgUrl = this.$imgPre + this.form.img;
+        //console.log(this.form);
+        this.form.specsattr = JSON.parse(res.data.list.specsattr);
+        //console.log(this.form.specsattr);
+      });
+    },
+    update() {
+      this.form.specsattr = JSON.stringify(this.form.specsattr);
+      requestProUpdate(this.form).then((res) => {
+        if (res.data.code == 200) {
+          successAlert(res.data.msg);
+          this.cancel();
+          this.empty();
+          this.requestList();
+          this.requestTotal();
         } else {
           warningAlert(res.data.msg);
         }

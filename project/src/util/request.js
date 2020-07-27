@@ -319,7 +319,7 @@ export const requestBannerDelete = (params) => {
         data: params
     })
 }
-//------------------------------轮播图-----------------------------
+//------------------------------商品-----------------------------
 //商品添加
 export const requestProAdd = (params) => {
     let form = new FormData();
@@ -371,6 +371,46 @@ export const requestProUpdate = (params) => {
 export const requestProDelete = (params) => {
     return axios({
         url: baseUrl + "/api/goodsdelete",
+        method: "post",
+        data: params
+    })
+}
+//------------------------------活动-----------------------------
+//添加活动
+export const requestActivityAdd = (params) =>{
+    return axios({
+        url: baseUrl + "/api/seckadd",
+        method: "post",
+        data: params
+    })
+}
+//活动列表
+export const requestActivityList = () => {
+    return axios({
+        url: baseUrl + "/api/secklist",
+        method: "get",
+    })
+}
+//单条活动
+export const requestActivityDetail = (params) => {
+    return axios({
+        url: baseUrl + "/api/seckinfo",
+        method: "get",
+        params
+    })
+}
+//修改活动
+export const requestActivityUpdate = (params) => {
+    return axios({
+        url: baseUrl + "/api/seckedit",
+        method: "post",
+        data: params
+    })
+}
+//删除活动
+export const requestActivityDelete = (params) => {
+    return axios({
+        url: baseUrl + "/api/seckdelete",
         method: "post",
         data: params
     })

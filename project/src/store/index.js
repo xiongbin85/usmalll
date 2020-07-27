@@ -12,6 +12,8 @@ import vip from "./modules/vip"
 import size from "./modules/size"
 import classify from "./modules/classify"
 import banner from "./modules/banner"
+import pro from "./modules/pro"
+import activity from "./modules/activity"
 export default new Vuex.Store({
     state,
     mutations,
@@ -25,6 +27,8 @@ export default new Vuex.Store({
         vip,
         size,
         classify,
-        banner
+        banner,
+        pro,
+        activity
     }
 })
