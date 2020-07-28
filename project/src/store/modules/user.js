@@ -1,7 +1,7 @@
 import { requestUserList, requestUserCount } from "../../util/request"
 const state = {
     list: [],
-    size: 2,
+    size: 3,
     total: 0,
     page: 1
 }
@@ -25,7 +25,7 @@ const actions = {
             size: context.state.size
         }
         requestUserList(params).then(res => {
-            if (res.data.list && context.state.page > 1) {
+            if (res.data.list.length==0 && context.state.page > 1) {
                 context.commit("changePage", context.state.page - 1);
                 context.dispatch("requestList")
                 return;

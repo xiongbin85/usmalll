@@ -7,7 +7,7 @@ const state = {
 const mutations = {
     changeClassifyList(state, arr) {
         state.list = arr;
-        console.log(arr);
+        //console.log(arr);
     }
 }
 

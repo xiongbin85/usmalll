@@ -30,7 +30,7 @@ export default {
     }),
     login() {
       requestLogin(this.user).then((res) => {
-        console.log(res);
+        //console.log(res);
         if (res.data.code == 200) {
           successAlert(res.data.msg);
           this.changeUser(res.data.list);

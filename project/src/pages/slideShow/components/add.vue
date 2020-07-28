@@ -41,7 +41,7 @@ export default {
       imgUrl: "",
       form: {
         title: "",
-        img: "",
+        img: null,
         status: 1,
       },
     };
@@ -65,12 +65,16 @@ export default {
     empty() {
       this.form = {
         title: "",
-        img: "",
+        img: null,
         status: 1,
       };
       this.imgUrl = "";
     },
     add() {
+      if (this.form.title == "" || this.form.img == null) {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestBannerAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
@@ -90,6 +94,10 @@ export default {
       });
     },
     update() {
+      if (this.form.title == "" || this.form.img == null) {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestBannerUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);

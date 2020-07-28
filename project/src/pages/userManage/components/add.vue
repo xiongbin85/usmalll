@@ -79,6 +79,14 @@ export default {
     },
     add() {
       //console.log(this.peopleList);
+      if (
+        this.form.roleid == null ||
+        this.form.username == "" ||
+        this.form.password == ""
+      ) {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestUserAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
@@ -98,6 +106,14 @@ export default {
       });
     },
     update() {
+      if (
+        this.form.roleid == null ||
+        this.form.username == "" ||
+        this.form.password == ""
+      ) {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestUserUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);

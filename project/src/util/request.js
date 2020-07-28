@@ -1,15 +1,31 @@
 import axios from "axios"
 import qs from "qs"
+import login from "../store/modules/login"
+import { warningAlert } from "./alert"
+import router from "../router"
+const baseUrl = "/api"
+//const baseUrl = ""
+
+//请求拦截
+axios.interceptors.request.use(config => {
+    if (config.url != baseUrl + '/api/userlogin') {
+        //后端要求要加请求头
+        config.headers.authorization = login.state.list.token;
+    }
+    return config
+})
 
 //响应拦截
 axios.interceptors.response.use(res => {
-    console.log('响应拦截器' + res.config.url);
-    console.log(res);
-    return res
+    //console.log('响应拦截器' + res.config.url);
+    //console.log(res);
+    if (res.data.msg === "登录已过期或访问权限受限") {
+        warningAlert("登录已过期或访问权限受限")
+        router.push("/login");
+        return;
+    }
+    return res;
 })
-
-const baseUrl = "/api"
-//const baseUrl = ""
 //----------------------------菜单-------------------------------
 //菜单添加
 export const requestMenuAdd = (params) => {
@@ -377,7 +393,7 @@ export const requestProDelete = (params) => {
 }
 //------------------------------活动-----------------------------
 //添加活动
-export const requestActivityAdd = (params) =>{
+export const requestActivityAdd = (params) => {
     return axios({
         url: baseUrl + "/api/seckadd",
         method: "post",

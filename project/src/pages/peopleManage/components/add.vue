@@ -80,6 +80,12 @@ export default {
     //添加
     add() {
       this.form.menus = JSON.stringify(this.$refs.tree.getCheckedKeys());
+      //console.log(this.form.menus);
+      if (this.form.rolename == "" || this.form.menus == "[]") {
+        //console.log(this.form.menus == "[]");
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       //console.log(this.form);
       requestPeopleAdd(this.form).then((res) => {
         if (res.data.code == 200) {
@@ -103,6 +109,11 @@ export default {
     //修改
     update() {
       this.form.menus = JSON.stringify(this.$refs.tree.getCheckedKeys());
+      if (this.form.rolename == "" || this.form.menus == "[]") {
+        //console.log(this.form.menus == "[]");
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestPeopleUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);

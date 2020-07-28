@@ -128,15 +128,18 @@ export default {
       //console.log(this.form.endtime);
     },
     //获取二级分类
-    getFirstCate(id) {
+    getFirstCate(bool) {
       this.classifylist.forEach((item) => {
-        if (item.id == id) {
+        if (item.id == this.form.first_cateid) {
           this.cateChildren = item.children;
         }
       });
+      if (!bool) {
+        this.form.second_cateid = "";
+      }
     },
     //获取商品
-    getPro() {
+    getPro(bool) {
       this.prolist.forEach((item) => {
         if (
           item.first_cateid == this.form.first_cateid &&
@@ -145,9 +148,22 @@ export default {
           this.goods.push(item);
         }
       });
-      //console.log(this.goods);
+      if (!bool) {
+        this.form.goodsid = "";
+      }
     },
     add() {
+      if (
+        this.form.title == "" ||
+        this.form.begintime == null ||
+        this.form.endtime == null ||
+        this.form.first_cateid == "" ||
+        this.form.second_cateid == "" ||
+        this.form.goodsid == ""
+      ) {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestActivityAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
@@ -169,11 +185,24 @@ export default {
         this.form.id = id;
         this.$set(this.arr, 0, new Date(Number.parseInt(this.form.begintime)));
         this.$set(this.arr, 1, new Date(Number.parseInt(this.form.endtime)));
+        this.getFirstCate(true);
+        this.getPro(true);
       });
     },
     update() {
       this.form.begintime = new Date(this.arr[0]).getTime();
       this.form.endtime = new Date(this.arr[1]).getTime();
+      if (
+        this.form.title == "" ||
+        this.form.begintime == null ||
+        this.form.endtime == null ||
+        this.form.first_cateid == "" ||
+        this.form.second_cateid == "" ||
+        this.form.goodsid == ""
+      ) {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestActivityUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);

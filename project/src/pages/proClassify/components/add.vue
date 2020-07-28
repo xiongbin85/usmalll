@@ -84,6 +84,14 @@ export default {
       //console.log(this.form);
     },
     add() {
+      if (
+        this.form.pid == null ||
+        this.form.catename == "" ||
+        this.form.img == null
+      ) {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestClassifyAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
@@ -103,6 +111,14 @@ export default {
       });
     },
     update() {
+      if (
+        this.form.pid == null ||
+        this.form.catename == "" ||
+        this.form.img == null
+      ) {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       //console.log(this.form);
       requestClassifyUpdate(this.form).then((res) => {
         if (res.data.code == 200) {

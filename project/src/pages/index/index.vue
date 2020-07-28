@@ -15,13 +15,28 @@
             <i class="el-icon-setting"></i>
             <span slot="title">首页</span>
           </el-menu-item>
-          <el-submenu :index="item.id+''" v-for="item in list.menus" :key="item.id">
+
+          <el-submenu
+            :index="item.id+''"
+            v-for="item in list.menus"
+            :key="item.id"
+            v-show="hasChildren"
+          >
             <template slot="title">
               <i :class="item.icon"></i>
               <span>{{item.title}}</span>
             </template>
             <el-menu-item :index="i.url" v-for="i in item.children" :key="i.id">{{i.title}}</el-menu-item>
           </el-submenu>
+
+          <el-menu-item
+            :index="i.url"
+            v-for="i in list.menus"
+            :key="i.id"
+            v-show="!hasChildren"
+          >
+            <span slot="title">{{i.title}}</span>
+          </el-menu-item>
           <!-- <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-location"></i>
@@ -43,7 +58,7 @@
             <el-menu-item index="/vipManage">会员管理</el-menu-item>
             <el-menu-item index="/slideShow">轮播图管理</el-menu-item>
             <el-menu-item index="/activity">秒杀活动</el-menu-item>
-          </el-submenu> -->
+          </el-submenu>-->
         </el-menu>
         <!-- 导航结束 -->
       </el-aside>
@@ -51,7 +66,7 @@
         <el-header>
           <div class="user">
             <span>{{list.username}}</span>
-            <el-button type="primary" @click="$router.push('/login')">退出</el-button>
+            <el-button type="primary" @click="goOut">退出</el-button>
           </div>
         </el-header>
         <el-main>
@@ -74,11 +89,22 @@ export default {
     ...mapGetters({
       list: "login/list",
     }),
+    hasChildren() {
+      return this.list.menus[0].children ? true : false;
+    },
   },
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    ...mapActions({
+      changeUser: "login/changeUser",
+    }),
+    goOut() {
+      this.changeUser(null);
+      this.$router.push("/login");
+    },
+  },
   mounted() {
     //console.log(this.list);
   },

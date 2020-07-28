@@ -1,18 +1,19 @@
-import { requestLogin } from "../../util/request"
 const state = {
-    list: {}
+    list: sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : null
 }
 
 const mutations = {
     changeLogin(state, arr) {
         state.list = arr
+        sessionStorage.setItem("user", JSON.stringify(state.list))
+        //console.log(state.list);
     }
 }
 
 const actions = {
     changeUser(context, params) {
         context.commit("changeLogin", params)
-        
+
     }
 }
 

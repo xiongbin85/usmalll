@@ -83,7 +83,11 @@ export default {
     },
     add() {
       this.form.attrs = JSON.stringify(this.arr.map((item) => item.value));
-      //console.log(this.form);
+      //console.log(this.form.attrs);
+      if (this.form.specsname == "" || this.form.attrs == '[""]') {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestSizeAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
@@ -108,6 +112,10 @@ export default {
     },
     update() {
       this.form.attrs = JSON.stringify(this.arr.map((item) => item.value));
+      if (this.form.specsname == "" || this.form.attrs == '[""]') {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestSizeUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);

@@ -107,16 +107,24 @@ export default {
     },
     //添加数据
     add() {
-      requestMenuAdd(this.form).then((res) => {
-        if (res.data.code == 200) {
-          successAlert(res.data.msg);
-          this.cancel();
-          this.empty();
-          this.requestMenuList();
-        } else {
-          warningAlert(res.data.msg);
-        }
-      });
+      if (
+        this.form.title == "" ||
+        (this.form.icon == "" && this.form.url == "")
+      ) {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      } else {
+        requestMenuAdd(this.form).then((res) => {
+          if (res.data.code == 200) {
+            successAlert(res.data.msg);
+            this.cancel();
+            this.empty();
+            this.requestMenuList();
+          } else {
+            warningAlert(res.data.msg);
+          }
+        });
+      }
     },
     //获取单条数据详情
     getDetail(id) {
@@ -127,6 +135,13 @@ export default {
     },
     //更新数据
     update() {
+      if (
+        this.form.title == "" ||
+        (this.form.icon == "" && this.form.url == "")
+      ) {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestMenuUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);

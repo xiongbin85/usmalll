@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="info.title" :visible.sync="info.show">
+    <el-dialog :title="info.title" :visible.sync="info.show" @opened="getEditor">
       <el-form :model="form">
         <el-form-item label="一级分类" label-width="80px">
           <el-select v-model="form.first_cateid" placeholder="请选择" @change="getFirstCate">
@@ -68,7 +68,7 @@
           <el-switch v-model="form.status" :active-value="1" :inactive-value="2"></el-switch>
         </el-form-item>
         <el-form-item label="商品描述" prop="desc">
-          <el-input type="textarea" v-model="form.description"></el-input>
+          <div id="desc"></div>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -87,6 +87,7 @@ import {
   requestProUpdate,
 } from "../../../util/request";
 import { successAlert, warningAlert } from "../../../util/alert";
+import E from "wangeditor";
 export default {
   props: ["info"],
   components: {},
@@ -101,6 +102,7 @@ export default {
       imgUrl: "",
       cateChildren: [],
       sizeChildren: [],
+      editor: null,
       form: {
         first_cateid: "",
         second_cateid: "",
@@ -142,29 +144,36 @@ export default {
       this.imgUrl = "";
       this.cateChildren = [];
       this.sizeChildren = [];
+      this.editor.txt.html("");
     },
     cancel() {
       this.info.show = false;
-      //   if (!this.info.isAdd) {
-      //     this.empty();
-      //   }
+        if (!this.info.isAdd) {
+          this.empty();
+        }
     },
     //获取已选择的一级分类
-    getFirstCate(id) {
+    getFirstCate(bool) {
       this.classifylist.forEach((item) => {
-        if (item.id == id) {
+        if (item.id == this.form.first_cateid) {
           this.cateChildren = item.children;
         }
       });
+      if (!bool) {
+        this.form.second_cateid = "";
+      }
     },
     //获取已选择的商品规格
-    getFirstSize(id) {
-      console.log(id);
+    getFirstSize(bool) {
+      //console.log(id);
       this.sizelist.forEach((item) => {
-        if (item.id == id) {
+        if (item.id == this.form.specsid) {
           this.sizeChildren = item.attrs;
         }
       });
+      // if (!bool) {
+      //   this.form.specsattr = [];
+      // }
     },
     change(file) {
       //console.log(file);
@@ -172,9 +181,29 @@ export default {
       this.form.img = file.raw;
       //console.log(this.form);
     },
+    //富文本编辑器
+    getEditor() {
+      this.editor = new E("#desc");
+      this.editor.create();
+      this.editor.txt.html(this.form.description);
+    },
     add() {
       this.form.specsattr = JSON.stringify(this.form.specsattr);
       //console.log(this.form.specsattr);
+      if (
+        this.form.first_cateid == "" ||
+        this.form.second_cateid == "" ||
+        this.form.goodsname == "" ||
+        this.form.price == "" ||
+        this.form.market_price == "" ||
+        this.form.img == null ||
+        this.editor.txt.html() ||
+        this.form.specsid == "" ||
+        this.form.specsattr == "[]"
+      ) {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestProAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
@@ -194,11 +223,27 @@ export default {
         this.imgUrl = this.$imgPre + this.form.img;
         //console.log(this.form);
         this.form.specsattr = JSON.parse(res.data.list.specsattr);
-        //console.log(this.form.specsattr);
+        this.getFirstCate(true);
+        this.getFirstSize(true);
       });
     },
     update() {
+      this.form.description = this.editor.txt.html();
       this.form.specsattr = JSON.stringify(this.form.specsattr);
+      if (
+        this.form.first_cateid == "" ||
+        this.form.second_cateid == "" ||
+        this.form.goodsname == "" ||
+        this.form.price == "" ||
+        this.form.market_price == "" ||
+        this.form.img == null ||
+        this.editor.txt.html() ||
+        this.form.specsid == "" ||
+        this.form.specsattr == "[]"
+      ) {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestProUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);

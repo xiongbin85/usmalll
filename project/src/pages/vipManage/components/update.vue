@@ -56,6 +56,14 @@ export default {
       });
     },
     update() {
+      if (
+        this.form.phone == "" ||
+        this.form.nickname == "" ||
+        this.form.password == ""
+      ) {
+        warningAlert("条件不能有空值,请完善信息");
+        return;
+      }
       requestVipUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
