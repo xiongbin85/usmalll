@@ -1,9 +1,9 @@
 <template>
   <div>
-    <el-dialog :title="info.title" :visible.sync="info.show" @opened="getEditor">
+    <el-dialog :title="info.title" :visible.sync="info.show" @opened="getEditor" @closed="clear">
       <el-form :model="form">
         <el-form-item label="一级分类" label-width="80px">
-          <el-select v-model="form.first_cateid" placeholder="请选择" @change="getFirstCate">
+          <el-select v-model="form.first_cateid" placeholder="请选择" @change="getFirstCate()">
             <el-option label="---请选择---" disabled value></el-option>
             <el-option
               v-for="item in classifylist"
@@ -40,7 +40,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="商品规格" label-width="80px">
-          <el-select v-model="form.specsid" placeholder="请选择" @change="getFirstSize">
+          <el-select v-model="form.specsid" placeholder="请选择" @change="getFirstSize()">
             <el-option label="---请选择---" disabled value></el-option>
             <el-option
               v-for="item in sizelist"
@@ -51,7 +51,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="商品属性" label-width="80px">
-          <el-select v-model="form.specsattr" multiple placeholder="请选择">
+          <el-select v-model="sizeArr" multiple placeholder="请选择">
             <el-option label="---请选择---" disabled value></el-option>
             <el-option v-for="item in sizeChildren" :key="item" :label="item" :value="item"></el-option>
           </el-select>
@@ -100,6 +100,7 @@ export default {
   data() {
     return {
       imgUrl: "",
+      sizeArr: [],
       cateChildren: [],
       sizeChildren: [],
       editor: null,
@@ -142,15 +143,22 @@ export default {
         status: 1,
       };
       this.imgUrl = "";
+      this.sizeArr = [];
       this.cateChildren = [];
       this.sizeChildren = [];
       this.editor.txt.html("");
     },
     cancel() {
       this.info.show = false;
-        if (!this.info.isAdd) {
-          this.empty();
-        }
+      if (!this.info.isAdd) {
+        this.empty();
+      }
+    },
+    //点击修改时弹框动画结束时清除所有值
+    clear() {
+      if (!this.info.isAdd) {
+        this.empty();
+      }
     },
     //获取已选择的一级分类
     getFirstCate(bool) {
@@ -171,12 +179,24 @@ export default {
           this.sizeChildren = item.attrs;
         }
       });
-      // if (!bool) {
-      //   this.form.specsattr = [];
-      // }
+      if (!bool) {
+        this.sizeArr = [];
+      }
     },
     change(file) {
       //console.log(file);
+      //限制上传图片的大小
+      if (file.size > 2 * 1024 * 1024) {
+        warningAlert("上传的图片不能超过2M");
+        return;
+      }
+      //上传的文件后缀必须是.png .jpg .gif .jpeg
+      var extname = file.name.slice(file.name.lastIndexOf("."));
+      var extArr = [".png", ".jpg", ".gif", ".jpeg"];
+      if (!extArr.some((item) => item === extname)) {
+        warningAlert("上传文件必须是图片");
+        return;
+      }
       this.imgUrl = URL.createObjectURL(file.raw);
       this.form.img = file.raw;
       //console.log(this.form);
@@ -188,33 +208,31 @@ export default {
       this.editor.txt.html(this.form.description);
     },
     add() {
-      this.form.specsattr = JSON.stringify(this.form.specsattr);
-      //console.log(this.form.specsattr);
+      this.form.specsattr = JSON.stringify(this.sizeArr);
+      //console.log(this.form);
       if (
         this.form.first_cateid == "" ||
         this.form.second_cateid == "" ||
         this.form.goodsname == "" ||
         this.form.price == "" ||
         this.form.market_price == "" ||
-        this.form.img == null ||
-        this.editor.txt.html() ||
-        this.form.specsid == "" ||
-        this.form.specsattr == "[]"
+        this.form.img == null
       ) {
-        warningAlert("条件不能有空值,请完善信息");
+        warningAlert("条件里面不能有空值");
         return;
+      } else {
+        requestProAdd(this.form).then((res) => {
+          if (res.data.code == 200) {
+            successAlert(res.data.msg);
+            this.cancel();
+            this.empty();
+            this.requestList();
+            this.requestTotal();
+          } else {
+            warningAlert(res.data.msg);
+          }
+        });
       }
-      requestProAdd(this.form).then((res) => {
-        if (res.data.code == 200) {
-          successAlert(res.data.msg);
-          this.cancel();
-          this.empty();
-          this.requestList();
-          this.requestTotal();
-        } else {
-          warningAlert(res.data.msg);
-        }
-      });
     },
     getDetail(id) {
       requestProDetail({ id: id }).then((res) => {
@@ -230,20 +248,6 @@ export default {
     update() {
       this.form.description = this.editor.txt.html();
       this.form.specsattr = JSON.stringify(this.form.specsattr);
-      if (
-        this.form.first_cateid == "" ||
-        this.form.second_cateid == "" ||
-        this.form.goodsname == "" ||
-        this.form.price == "" ||
-        this.form.market_price == "" ||
-        this.form.img == null ||
-        this.editor.txt.html() ||
-        this.form.specsid == "" ||
-        this.form.specsattr == "[]"
-      ) {
-        warningAlert("条件不能有空值,请完善信息");
-        return;
-      }
       requestProUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);

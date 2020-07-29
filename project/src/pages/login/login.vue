@@ -34,7 +34,7 @@ export default {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
           this.changeUser(res.data.list);
-          this.$router.push("/home");
+          this.$router.push("/home");21
         } else {
           warningAlert(res.data.msg);
         }
@@ -60,6 +60,7 @@ export default {
 h1 {
   text-align: center;
   margin-bottom: 10px;
+  color: #fff;
 }
 .input {
   width: 80%;

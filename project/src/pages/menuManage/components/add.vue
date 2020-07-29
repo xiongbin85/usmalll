@@ -1,12 +1,12 @@
 <template>
   <div>
-    <el-dialog :title="info.title" :visible.sync="info.show">
+    <el-dialog :title="info.title" :visible.sync="info.show" @closed="clear">
       <el-form :model="form">
         <el-form-item label="菜单名称" label-width="80px">
           <el-input v-model="form.title"></el-input>
         </el-form-item>
         <el-form-item label="上级菜单" label-width="80px">
-          <el-select v-model="form.pid" placeholder="请选择">
+          <el-select v-model="form.pid" placeholder="请选择" @change="changeType">
             <el-option label="---请选择---" disabled value></el-option>
             <el-option label="顶级菜单" :value="0"></el-option>
             <el-option v-for="item in list" :key="item.id" :label="item.title" :value="item.id"></el-option>
@@ -47,6 +47,7 @@ import {
   requestMenuUpdate,
 } from "../../../util/request";
 import { successAlert, warningAlert } from "../../../util/alert";
+//引入vuex状态层存储的值和方法
 import { mapGetters, mapActions } from "vuex";
 export default {
   props: ["info"],
@@ -89,12 +90,14 @@ export default {
     };
   },
   methods: {
+    //点击取消按钮退出并清空所有值
     cancel() {
       this.info.show = false;
       if (!this.info.isAdd) {
         this.empty();
       }
     },
+    // 清空所有的值
     empty() {
       this.form = {
         pid: 0,
@@ -105,8 +108,22 @@ export default {
         status: 1,
       };
     },
+    //点击的是修改时弹框动画结束清除所有值
+    clear() {
+      if (!this.info.isAdd) {
+        this.empty();
+      }
+    },
+    changeType() {
+      if (this.form.pid == 0) {
+        this.form.type = 1;
+      } else {
+        this.form.type = 2;
+      }
+    },
     //添加数据
     add() {
+      //判断是否有空值
       if (
         this.form.title == "" ||
         (this.form.icon == "" && this.form.url == "")

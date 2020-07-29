@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="info.title" :visible.sync="info.show">
+    <el-dialog :title="info.title" :visible.sync="info.show" @closed="clear">
       <el-form :model="form">
         <el-form-item label="活动名称" label-width="80px">
           <el-input v-model="form.title"></el-input>
@@ -116,6 +116,12 @@ export default {
     },
     cancel() {
       this.info.show = false;
+      if (!this.info.isAdd) {
+        this.empty();
+      }
+    },
+    //点击修改时弹框动画结束清除所有值
+    clear() {
       if (!this.info.isAdd) {
         this.empty();
       }

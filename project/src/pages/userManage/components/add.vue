@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="info.title" :visible.sync="info.show">
+    <el-dialog :title="info.title" :visible.sync="info.show" @closed="clear">
       <el-form :model="form">
         <el-form-item label="所属角色" label-width="80px">
           <el-select v-model="form.roleid" placeholder="请选择">
@@ -76,6 +76,12 @@ export default {
         password: "",
         status: 1,
       };
+    },
+    //点击的是修改时弹框动画结束清除所有值
+    clear() {
+      if (!this.info.isAdd) {
+        this.empty();
+      }
     },
     add() {
       //console.log(this.peopleList);

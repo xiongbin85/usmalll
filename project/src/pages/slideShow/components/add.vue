@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="info.title" :visible.sync="info.show">
+    <el-dialog :title="info.title" :visible.sync="info.show" @closed="clear">
       <el-form :model="form">
         <el-form-item label="标题" label-width="80px">
           <el-input v-model="form.title"></el-input>
@@ -69,6 +69,12 @@ export default {
         status: 1,
       };
       this.imgUrl = "";
+    },
+    //点击的是修改时弹框动画结束清除所有值
+    clear() {
+      if (!this.info.isAdd) {
+        this.empty();
+      }
     },
     add() {
       if (this.form.title == "" || this.form.img == null) {

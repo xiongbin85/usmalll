@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="info.title" :visible.sync="info.show">
+    <el-dialog :title="info.title" :visible.sync="info.show" @closed="clear">
       <el-form :model="form">
         <el-form-item label="角色名称" label-width="80px">
           <el-input v-model="form.rolename"></el-input>
@@ -77,6 +77,12 @@ export default {
       };
       this.$refs.tree.setCheckedKeys([]);
     },
+    //点击的是修改时弹框动画结束清除所有值
+    clear() {
+      if (!this.info.isAdd) {
+        this.empty();
+      }
+    },
     //添加
     add() {
       this.form.menus = JSON.stringify(this.$refs.tree.getCheckedKeys());
@@ -98,7 +104,7 @@ export default {
         }
       });
     },
-    //获取单条数据并渲染到add里面
+    //获取单条数据并渲染到弹框中里面
     getDetail(id) {
       requestPeopleDetail({ id: id }).then((res) => {
         this.form = res.data.list;

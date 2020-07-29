@@ -15,20 +15,20 @@
             <i class="el-icon-setting"></i>
             <span slot="title">首页</span>
           </el-menu-item>
-
+          <!-- 有目录 -->
           <el-submenu
             :index="item.id+''"
             v-for="item in list.menus"
-            :key="item.id"
+            :key="item.title"
             v-show="hasChildren"
           >
             <template slot="title">
               <i :class="item.icon"></i>
               <span>{{item.title}}</span>
             </template>
-            <el-menu-item :index="i.url" v-for="i in item.children" :key="i.id">{{i.title}}</el-menu-item>
+            <el-menu-item :index="i.url" v-for="i in item.children" :key="i.title">{{i.title}}</el-menu-item>
           </el-submenu>
-
+          <!-- 没有目录 -->
           <el-menu-item
             :index="i.url"
             v-for="i in list.menus"

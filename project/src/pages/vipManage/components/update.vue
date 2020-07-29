@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="会员修改" :visible.sync="info.show">
+    <el-dialog title="会员修改" :visible.sync="info.show" @closed="clear">
       <el-form :model="form">
         <el-form-item label="手机号" label-width="80px">
           <el-input v-model="form.phone"></el-input>
@@ -49,6 +49,12 @@ export default {
         password: "",
         status: 1,
       };
+    },
+    //点击的是修改时弹框动画结束清除所有值
+    clear() {
+      if (!this.info.isAdd) {
+        this.empty();
+      }
     },
     getDetail(id) {
       requestVipDetail({ uid: id }).then((res) => {

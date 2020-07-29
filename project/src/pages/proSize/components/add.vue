@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="info.title" :visible.sync="info.show">
+    <el-dialog :title="info.title" :visible.sync="info.show" @closed="clear">
       <el-form :model="form">
         <el-form-item label="规格名称" label-width="80px">
           <el-input v-model="form.specsname"></el-input>
@@ -80,6 +80,12 @@ export default {
         specsname: "",
         status: 1,
       };
+    },
+    //点击的是修改时弹框动画结束清除所有值
+    clear() {
+      if (!this.info.isAdd) {
+        this.empty();
+      }
     },
     add() {
       this.form.attrs = JSON.stringify(this.arr.map((item) => item.value));

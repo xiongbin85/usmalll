@@ -76,7 +76,7 @@ export default {
   mounted() {
     this.requestTotal();
     this.requestList();
-    console.log(this.list);
+    //console.log(this.list);
   },
 };
 </script>
