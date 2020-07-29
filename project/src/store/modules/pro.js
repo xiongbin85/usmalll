@@ -8,9 +8,9 @@ const state = {
 
 const mutations = {
     changeProList(state, arr) {
-        arr.forEach(i => {
-            i.specsattr = JSON.parse(i.specsattr)
-        });
+        // arr.forEach(i => {
+        //     i.specsattr = JSON.parse(i.specsattr)
+        // });
         state.list = arr;
         //console.log(arr);
     },

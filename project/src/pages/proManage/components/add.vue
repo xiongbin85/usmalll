@@ -240,14 +240,14 @@ export default {
         this.form.id = id;
         this.imgUrl = this.$imgPre + this.form.img;
         //console.log(this.form);
-        this.form.specsattr = JSON.parse(res.data.list.specsattr);
+        this.this.sizeArr = JSON.parse(res.data.list.specsattr);
         this.getFirstCate(true);
         this.getFirstSize(true);
       });
     },
     update() {
       this.form.description = this.editor.txt.html();
-      this.form.specsattr = JSON.stringify(this.form.specsattr);
+      this.form.specsattr = JSON.stringify(this.this.sizeArr);
       requestProUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
