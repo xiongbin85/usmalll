@@ -1,11 +1,17 @@
 <template>
-  <div>
+  <div class="add">
     <el-dialog :title="info.title" :visible.sync="info.show" @closed="clear">
       <el-form :model="form">
         <el-form-item label="规格名称" label-width="80px">
           <el-input v-model="form.specsname"></el-input>
         </el-form-item>
-        <el-form-item v-for="(item, index) in arr" label="规格属性" :key="index" label-width="80px">
+        <el-form-item
+          v-for="(item, index) in arr"
+          label="规格属性"
+          :key="index"
+          label-width="80px"
+          class="content"
+        >
           <el-input v-model="item.value" class="del"></el-input>
           <el-button @click.prevent="addNew(item)" type="primary" v-if="index==0">新增商品规格</el-button>
           <el-button @click.prevent="removeDomain(item)" type="danger" v-else>删除</el-button>
@@ -138,8 +144,15 @@ export default {
   mounted() {},
 };
 </script>
-<style scoped>
-.del {
+<style scoped lang="stylus">
+/* .del {
   width: 75%;
+} */
+.add >>> .el-form-item__content {
+  display: flex !important;
+}
+
+.add >>> .el-input {
+  flex: 1;
 }
 </style>

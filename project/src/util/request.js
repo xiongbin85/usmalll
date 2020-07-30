@@ -4,7 +4,8 @@ import login from "../store/modules/login"
 import { warningAlert } from "./alert"
 import router from "../router"
 //设置初始路径
-const baseUrl = "/api"
+// const baseUrl = "/api"
+const baseUrl = ""
 
 //请求拦截
 axios.interceptors.request.use(config => {

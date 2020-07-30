@@ -16,7 +16,7 @@
             <span slot="title">首页</span>
           </el-menu-item>
           <!-- 有目录 -->
-          <el-submenu
+          <!-- <el-submenu
             :index="item.id+''"
             v-for="item in list.menus"
             :key="item.title"
@@ -27,38 +27,25 @@
               <span>{{item.title}}</span>
             </template>
             <el-menu-item :index="i.url" v-for="i in item.children" :key="i.title">{{i.title}}</el-menu-item>
-          </el-submenu>
-          <!-- 没有目录 -->
-          <el-menu-item
-            :index="i.url"
-            v-for="i in list.menus"
-            :key="i.id"
-            v-show="!hasChildren"
-          >
-            <span slot="title">{{i.title}}</span>
-          </el-menu-item>
-          <!-- <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>系统设置</span>
-            </template>
-            <el-menu-item index="/menuManage">菜单管理</el-menu-item>
-            <el-menu-item index="/peopleManage">角色管理</el-menu-item>
-            <el-menu-item index="/userManage">管理员管理</el-menu-item>
-          </el-submenu>
-
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>商城设置</span>
-            </template>
-            <el-menu-item index="/proClassify">商品分类</el-menu-item>
-            <el-menu-item index="/proSize">商品规格</el-menu-item>
-            <el-menu-item index="/proManage">商品管理</el-menu-item>
-            <el-menu-item index="/vipManage">会员管理</el-menu-item>
-            <el-menu-item index="/slideShow">轮播图管理</el-menu-item>
-            <el-menu-item index="/activity">秒杀活动</el-menu-item>
           </el-submenu>-->
+          <!-- 没有目录 -->
+          <!-- <el-menu-item :index="i.url" v-for="i in list.menus" :key="i.id" v-show="!hasChildren">
+            <span slot="title">{{i.title}}</span>
+          </el-menu-item> -->
+          <!-- 混合目录菜单 -->
+          <template v-for="item in list.menus">
+            <el-submenu :index="item.id+''" :key="item.id" v-if="item.children">
+              <template slot="title">
+                <i :class="item.icon"></i>
+                <span>{{item.title}}</span>
+              </template>
+              <el-menu-item :index="i.url" v-for="i in item.children" :key="i.id">{{i.title}}</el-menu-item>
+            </el-submenu>
+
+            <el-menu-item :index="item.url" :key="item.id" v-if="!item.children">
+              <span slot="title">{{item.title}}</span>
+            </el-menu-item>
+          </template>
         </el-menu>
         <!-- 导航结束 -->
       </el-aside>

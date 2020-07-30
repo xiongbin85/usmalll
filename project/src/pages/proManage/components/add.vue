@@ -240,14 +240,15 @@ export default {
         this.form.id = id;
         this.imgUrl = this.$imgPre + this.form.img;
         //console.log(this.form);
-        this.this.sizeArr = JSON.parse(res.data.list.specsattr);
+        this.sizeArr = JSON.parse(res.data.list.specsattr);
+        console.log(this.sizeArr);
         this.getFirstCate(true);
         this.getFirstSize(true);
       });
     },
     update() {
       this.form.description = this.editor.txt.html();
-      this.form.specsattr = JSON.stringify(this.this.sizeArr);
+      this.form.specsattr = JSON.stringify(this.sizeArr);
       requestProUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
@@ -265,9 +266,8 @@ export default {
     if (this.classifylist.length == 0) {
       this.requestClassify();
     }
-    if (this.sizelist.length == 0) {
-      this.requestSize();
-    }
+
+    this.requestSize();
   },
 };
 </script>

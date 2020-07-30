@@ -5,7 +5,11 @@ const state = {
 const mutations = {
     changeLogin(state, arr) {
         state.list = arr
-        sessionStorage.setItem("user", JSON.stringify(state.list))
+        if (arr) {
+            sessionStorage.setItem("user", JSON.stringify(state.list))
+        } else {
+            sessionStorage.removeItem("user")
+        }
         //console.log(state.list);
     }
 }

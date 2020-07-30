@@ -25,7 +25,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 
 
-Vue.prototype.$imgPre = "http://localhost:3000"
+// Vue.prototype.$imgPre = "http://localhost:3000"
+Vue.prototype.$imgPre = ""
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
